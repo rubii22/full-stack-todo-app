@@ -58,3 +58,12 @@ temp/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Python
+backend/venv/
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class

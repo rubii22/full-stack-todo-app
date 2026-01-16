@@ -35,25 +35,25 @@ export default function TaskCard({ task, onUpdate, onDelete }: TaskCardProps) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="shadow-sm px-3 py-2 border border-gray-300 focus:border-indigo-500 rounded-md focus:outline-none focus:ring-indigo-500 w-full text-gray-700"
             autoFocus
           />
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="shadow-sm px-3 py-2 border border-gray-300 focus:border-indigo-500 rounded-md focus:outline-none focus:ring-indigo-500 w-full text-gray-700"
             rows={2}
           />
           <div className="flex space-x-2">
             <button
               onClick={handleSave}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 shadow-sm px-3 py-1 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium text-white text-sm"
             >
               Save
             </button>
             <button
               onClick={handleCancel}
-              className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center bg-white hover:bg-gray-50 shadow-sm px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium text-gray-700 text-sm"
             >
               Cancel
             </button>
@@ -66,9 +66,9 @@ export default function TaskCard({ task, onUpdate, onDelete }: TaskCardProps) {
               type="checkbox"
               checked={task.completed}
               onChange={handleToggleComplete}
-              className="h-4 w-4 text-indigo-600 border-gray-300 rounded mt-1"
+              className="mt-1 border-gray-300 rounded w-4 h-4 text-indigo-600"
             />
-            <div className="ml-3 flex-1">
+            <div className="flex-1 ml-3">
               <h3 className={`text-lg font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
                 {task.title}
               </h3>
@@ -77,21 +77,21 @@ export default function TaskCard({ task, onUpdate, onDelete }: TaskCardProps) {
                   {task.description}
                 </p>
               )}
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-gray-500 text-xs">
                 Created: {new Date(task.createdAt).toLocaleDateString()}
               </p>
             </div>
           </div>
-          <div className="mt-3 flex justify-end space-x-2">
+          <div className="flex justify-end space-x-2 mt-3">
             <button
               onClick={() => setIsEditing(true)}
-              className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center bg-white hover:bg-gray-50 shadow-sm px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium text-gray-700 text-sm"
             >
               Edit
             </button>
             <button
               onClick={onDelete}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="inline-flex items-center bg-red-600 hover:bg-red-700 shadow-sm px-3 py-1 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 font-medium text-white text-sm"
             >
               Delete
             </button>

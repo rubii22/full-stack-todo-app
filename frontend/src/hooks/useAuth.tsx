@@ -18,7 +18,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode; }) {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -32,13 +32,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const isValid = await validateToken();
         if (isValid) {
-          // In a real app, you would fetch user details here
-          // For now, we'll just set isAuthenticated to true
-          setAuthState(prev => ({
-            ...prev,
+          // Fetch real user details
+          const user = await apiClient.get<User>('/auth/me');
+          setAuthState({
+            user,
             isAuthenticated: true,
             isLoading: false,
-          }));
+            error: null,
+          });
         } else {
           setAuthState({
             user: null,
@@ -52,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           user: null,
           isAuthenticated: false,
           isLoading: false,
-          error: (error as Error).message,
+          error: null, // Don't show error for background auth check
         });
       }
     };
@@ -64,22 +65,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      // Placeholder for actual API call
-      // const response = await apiClient.post('/auth/login', { email, password });
-      // For demo purposes, we'll simulate a successful login
-      const mockUser = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      const response = await apiClient.post<{ access_token: string; }>('/auth/login', { email, password });
 
-      // Simulate saving token
-      await setAuthToken('mock-jwt-token');
+      // Save token
+      await setAuthToken(response.access_token);
+
+      // Fetch user details
+      const user = await apiClient.get<User>('/auth/me');
 
       setAuthState({
-        user: mockUser,
+        user,
         isAuthenticated: true,
         isLoading: false,
         error: null,
@@ -88,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAuthState(prev => ({
         ...prev,
         isLoading: false,
-        error: (error as Error).message,
+        error: 'Invalid email or password',
       }));
       throw error;
     }
@@ -98,31 +93,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      // Placeholder for actual API call
-      // const response = await apiClient.post('/auth/register', { name, email, password });
-      // For demo purposes, we'll simulate a successful registration
-      const mockUser = {
-        id: '1',
-        email,
-        name,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      await apiClient.post('/auth/signup', { name, email, password });
 
-      // Simulate saving token
-      await setAuthToken('mock-jwt-token');
-
-      setAuthState({
-        user: mockUser,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-      });
+      // After signup, login automatically
+      await login(email, password);
     } catch (error) {
       setAuthState(prev => ({
         ...prev,
         isLoading: false,
-        error: (error as Error).message,
+        error: 'Registration failed. Email might already be in use.',
       }));
       throw error;
     }
