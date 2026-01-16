@@ -16,17 +16,33 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
     def __init__(self, app, exempt_paths: Optional[list] = None):
         super().__init__(app)
-        self.exempt_paths = exempt_paths or ["/health", "/docs", "/redoc", "/openapi.json"]
-        self.security = HTTPBearer(auto_error=False)  # Don't auto-error, handle manually
+        self.exempt_paths = exempt_paths or [
+            "/health",
+            "/docs",
+            "/redoc",
+            "/openapi.json",
+            "/api/auth/login",
+            "/api/auth/signup",
+        ]
+        self.security = HTTPBearer(
+            auto_error=False
+        )  # Don't auto-error, handle manually
 
-    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: RequestResponseEndpoint
+    ) -> Response:
         # Skip authentication for exempt paths
-        if request.url.path in self.exempt_paths or request.url.path.startswith("/api/docs"):
+        if request.url.path in self.exempt_paths or request.url.path.startswith(
+            "/api/docs"
+        ):
             response = await call_next(request)
             return response
 
         # Skip authentication for non-API routes (for now, we'll protect all /api/ routes)
-        if not request.url.path.startswith("/api/") or request.url.path == "/api/health":
+        if (
+            not request.url.path.startswith("/api/")
+            or request.url.path == "/api/health"
+        ):
             response = await call_next(request)
             return response
 
