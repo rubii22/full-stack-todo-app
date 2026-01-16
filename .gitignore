@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env.local
+.env.production
+.env.test
+.env
+
+# Next.js
+.next/
+out/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage
+coverage/
+
+# Production
+public/build/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Browser extensions
+/browser-extension/
+
+# Temporary files
+tmp/
+temp/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
