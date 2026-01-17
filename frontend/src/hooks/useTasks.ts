@@ -16,45 +16,24 @@ export function useTasks(): UseTasksReturn {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Mock data for demonstration purposes
   useEffect(() => {
-    // In a real application, this would fetch from an API
-    // loadTasks();
-
-    // For demo purposes, using mock data
-    setTimeout(() => {
-      setTasks([
-        {
-          id: '1',
-          title: 'Sample Task',
-          description: 'This is a sample task to get you started',
-          completed: false,
-          userId: 'user1',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          title: 'Another Task',
-          description: 'This is another sample task',
-          completed: true,
-          userId: 'user1',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }
-      ]);
-      setLoading(false);
-    }, 500);
+    loadTasks();
   }, []);
 
   const loadTasks = async () => {
     try {
       setLoading(true);
       setError(null);
-      // const data: Task[] = await apiClient.get('/tasks');
-      // setTasks(data);
+      const data = await apiClient.get<{ tasks: any[]; }>('/tasks/');
+      // Convert numeric IDs to strings to match frontend types
+      const formattedTasks: Task[] = data.tasks.map(task => ({
+        ...task,
+        id: task.id.toString(),
+        userId: task.user_id
+      }));
+      setTasks(formattedTasks);
     } catch (err) {
-      setError((err as Error).message);
+      setError('Failed to load tasks');
     } finally {
       setLoading(false);
     }
@@ -64,22 +43,15 @@ export function useTasks(): UseTasksReturn {
     try {
       setLoading(true);
       setError(null);
-      // const newTask: Task = await apiClient.post('/tasks', taskData);
-      // setTasks([newTask, ...tasks]);
-
-      // For demo purposes, creating a mock task
+      const data = await apiClient.post<any>('/tasks/', taskData);
       const newTask: Task = {
-        id: Date.now().toString(),
-        title: taskData.title,
-        description: taskData.description,
-        completed: false,
-        userId: 'user1',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        ...data,
+        id: data.id.toString(),
+        userId: data.user_id
       };
       setTasks([newTask, ...tasks]);
     } catch (err) {
-      setError((err as Error).message);
+      setError('Failed to create task');
     } finally {
       setLoading(false);
     }
@@ -89,17 +61,15 @@ export function useTasks(): UseTasksReturn {
     try {
       setLoading(true);
       setError(null);
-      // const updated: Task = await apiClient.put(`/tasks/${id}`, updatedTask);
-      // setTasks(tasks.map(task => task.id === id ? updated : task));
-
-      // For demo purposes, updating mock task
-      setTasks(tasks.map(task =>
-        task.id === id
-          ? { ...task, ...updatedTask, updatedAt: new Date().toISOString() }
-          : task
-      ));
+      const data = await apiClient.put<any>(`/tasks/${id}`, updatedTask);
+      const updated: Task = {
+        ...data,
+        id: data.id.toString(),
+        userId: data.user_id
+      };
+      setTasks(tasks.map(task => task.id === id ? updated : task));
     } catch (err) {
-      setError((err as Error).message);
+      setError('Failed to update task');
     } finally {
       setLoading(false);
     }
@@ -109,13 +79,10 @@ export function useTasks(): UseTasksReturn {
     try {
       setLoading(true);
       setError(null);
-      // await apiClient.delete(`/tasks/${id}`);
-      // setTasks(tasks.filter(task => task.id !== id));
-
-      // For demo purposes, deleting mock task
+      await apiClient.delete(`/tasks/${id}`);
       setTasks(tasks.filter(task => task.id !== id));
     } catch (err) {
-      setError((err as Error).message);
+      setError('Failed to delete task');
     } finally {
       setLoading(false);
     }
