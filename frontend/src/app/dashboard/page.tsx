@@ -27,35 +27,41 @@ export default function DashboardPage() {
   return (
     <div className="py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <h1 className="text-2xl font-semibold text-gray-900">My Tasks</h1>
+        <h1 className="text-2xl font-semibold text-white">My Tasks</h1>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <div className="py-4">
-          <TaskForm onCreateTask={createTask} />
+          <div className="glass-effect bg-[#000000]/25 backdrop-blur-2xl border border-gray-600/30 rounded-2xl p-6 mb-6">
+            <TaskForm onCreateTask={createTask} />
+          </div>
 
           <div className="mt-8">
-            <TaskFilter
-              currentFilter={filter}
-              onFilterChange={setFilter}
-              taskCount={filteredTasks.length}
-            />
+            <div className="glass-effect bg-[#000000]/25 backdrop-blur-2xl border border-gray-600/30 rounded-2xl p-4 mb-6">
+              <TaskFilter
+                currentFilter={filter}
+                onFilterChange={setFilter}
+                taskCount={filteredTasks.length}
+              />
+            </div>
 
             {error && (
-              <div className="rounded-md bg-red-50 p-4 mt-4">
-                <div className="text-sm text-red-700">{error}</div>
+              <div className="bg-red-500/20 border border-red-500/30 text-red-200 px-4 py-3 rounded-lg backdrop-blur-sm mb-6">
+                <div className="text-sm">{error}</div>
               </div>
             )}
 
             {loading ? (
               <div className="flex justify-center items-center h-32">
-                <p>Loading tasks...</p>
+                <p className="text-white">Loading tasks...</p>
               </div>
             ) : (
-              <TaskList
-                tasks={filteredTasks}
-                onUpdateTask={updateTask}
-                onDeleteTask={deleteTask}
-              />
+              <div className="glass-effect bg-[#000000]/25 backdrop-blur-2xl border border-gray-600/30 rounded-2xl overflow-hidden">
+                <TaskList
+                  tasks={filteredTasks}
+                  onUpdateTask={updateTask}
+                  onDeleteTask={deleteTask}
+                />
+              </div>
             )}
           </div>
         </div>

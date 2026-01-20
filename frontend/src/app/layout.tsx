@@ -16,8 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="light" suppressHydrationWarning>
+      <body className={`${inter.className} bg-[#F3E9DC] dark:bg-[#1a1a2e] transition-colors duration-300`}>
+        <div className="orb-container">
+          <div className="orb"></div>
+          <div className="orb"></div>
+          <div className="orb"></div>
+          <div className="orb"></div>
+          <div className="orb"></div>
+        </div>
         <Providers>{children}</Providers>
       </body>
     </html>
