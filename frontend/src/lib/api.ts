@@ -1,7 +1,7 @@
 // frontend/src/lib/api.ts
 import { getAuthToken } from './auth';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://ruby2210-todo-manager.hf.space/api';
 
 class ApiClient {
   async request(endpoint: string, options: RequestInit = {}) {
